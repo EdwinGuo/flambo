@@ -29,6 +29,7 @@
            (java.util Comparator)
            (org.apache.spark.api.java JavaSparkContext StorageLevels)
            org.apache.spark.api.java.JavaRDD
+           org.apache.spark.broadcast.HttpBroadcast
            (org.apache.spark.rdd PartitionwiseSampledRDD)
            (flambo.function Function Function2 Function3 VoidFunction FlatMapFunction
                             PairFunction PairFlatMapFunction)))
@@ -297,9 +298,9 @@
       (.leftOuterJoin (map-to-pair other identity))
       (.map (function
              (fn [t]
-                      (let [[x t2] (untuple t)
-                            [a b] (untuple t2)]
-                        (vector x [a (.orNull b)])))))))
+               (let [[x t2] (untuple t)
+                     [a b] (untuple t2)]
+                 (vector x [a (.orNull b)])))))))
 
 (defn sample
   "Returns a `fraction` sample of `rdd`, with or without replacement,
@@ -395,3 +396,18 @@
   program computes all the elements)."
   [rdd cnt]
   (.take rdd cnt))
+
+(defn union
+  "will merge two rdd together, better add check for whether rdd is empty or not, otherwise will cause memory issue"
+  [rdd1 rdd2]
+  (.union rdd1 rdd2))
+
+(defn broadcast
+  "will broadcast the values to every executor's node, this will be a read only copy"
+  [sc v]
+  (.broadcast sc v))
+
+(defn value
+  "will get the value from the broadcast object"
+  [^HttpBroadcast broadInstance]
+  (.value broadInstance))
