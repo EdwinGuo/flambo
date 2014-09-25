@@ -29,6 +29,7 @@
            (java.util Comparator)
            (org.apache.spark.api.java JavaSparkContext StorageLevels)
            org.apache.spark.api.java.JavaRDD
+           org.apache.spark.broadcast.HttpBroadcast
            (org.apache.spark.rdd PartitionwiseSampledRDD)
            (flambo.function Function Function2 Function3 VoidFunction FlatMapFunction
                             PairFunction PairFlatMapFunction)))
